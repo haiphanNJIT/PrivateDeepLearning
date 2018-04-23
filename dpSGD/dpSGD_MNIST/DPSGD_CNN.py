@@ -20,31 +20,6 @@ import accountant, utils
 
 mnist = input_data.read_data_sets("MNIST_data/", one_hot=True);
 
-#FLAGS = flags.FLAGS
-#flags.DEFINE_float('clip_bound',8,'the clip bound of the gradients')
-#flags.DEFINE_float('clip_bound_2',1/1.5,'the clip bound for r_kM')
-
-#flags.DEFINE_float('small_num',1e-5,'a small number')
-#flags.DEFINE_float('large_num',1e5,'a large number')
-#flags.DEFINE_integer('num_images',60000,'number of images N')
-
-#flags.DEFINE_integer('batch_size',200,'batch_size L')
-#flags.DEFINE_float('sample_rate',200/60000,'sample rate q = L / N')
-#flags.DEFINE_integer('num_steps',10000,'number of steps T = E * N / L = E / q')
-#flags.DEFINE_integer('num_epoch',10,'number of epoches E')
-
-#flags.DEFINE_float('sigma',4.0,'sigma')
-#flags.DEFINE_float('epsilon',1.24,'epsilon')
-#flags.DEFINE_float('delta',1e-5,'delta')
-
-#flags.DEFINE_float('lambd',1e3,'exponential distribution parameter')
-
-#flags.DEFINE_integer('iterative_clip_step',10,'iterative_clip_step')
-
-#flags.DEFINE_integer('clip',1,'whether to clip the gradient')
-#flags.DEFINE_integer('noise',1,'whether to add noise')
-#flags.DEFINE_integer('redistribute',1,'whether to redistribute the noise')
-
 def idle():
     return
 
