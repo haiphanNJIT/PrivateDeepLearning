@@ -55,7 +55,7 @@ python3 CifarEval.py
 The default hyper-parameters can be edited in each main() file.
 
 # Cites
-If you use this code, please cite the following paper:
+If you use this code, please cite the following papers:
 
 Adaptive Laplace Mechanism: Differential Privacy Preservation in Deep Learning
 NhatHai Phan, Xintao Wu, Han Hu, Dejing Dou. https://arxiv.org/abs/1709.05750.
