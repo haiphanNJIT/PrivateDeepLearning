@@ -91,7 +91,6 @@ def main(_):
   T = int(D/L*epochs + 1); #number of steps T
   step_for_epoch = int(D/L); #number of steps for one epoch
   LR = 5e-4; #learning rate
-  #LRPfile = "/Users/haiphan/Documents/Research Associate/Programming/ActivationalMache/lrp_toolbox-master/SandP2017/Relevance_R_0_1.txt";
   LRPfile = os.getcwd() + '/Relevance_R_0_075.txt';
   #############################
   mnist = input_data.read_data_sets("MNIST_data/", one_hot = True);
