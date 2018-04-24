@@ -76,7 +76,7 @@ def main(_):
   Delta2 = 2*14*14*25; #global sensitivity for the first hidden layer
   Delta3 = 10*(hk + 1/4 * hk**2); #global sensitivity for the output layer
   D = 60000; #size of the dataset
-  L = 10000; #batch size
+  L = 1800; #batch size
   image_size = 28;
   padding = 4;
   #numHidUnits = 14*14*32 + 7*7*64 + M + 10; #number of hidden units
