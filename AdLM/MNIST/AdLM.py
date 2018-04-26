@@ -167,9 +167,8 @@ def main(_):
   ###
   h_fc1 = tf.nn.relu(BN_norm);
   h_fc1 = tf.clip_by_value(h_fc1, 0, 1) #hidden neurons must be bounded in [0, 1]
-  '''perturbFM = np.random.laplace(0.0, scale3, hk)
-  perturbFM = np.reshape(perturbFM, [hk]);'''
-  perturbFM = tf.placeholder(tf.float32, [hk]);
+  perturbFM = np.random.laplace(0.0, scale3, hk)
+  perturbFM = np.reshape(perturbFM, [hk]);
   h_fc1 += perturbFM;
   #Sometime bound the 2-norm of h_fc1 can help to stablize the training process. Use with care.
   #h_fc1 = tf.clip_by_norm(h_fc1, c[2], 1);
@@ -275,15 +274,12 @@ def main(_):
       #train_accuracy = accuracy.eval(feed_dict={x:batch[0], y_: batch[1], noise: LapNoise, keep_prob: 1.0});
       #print("step \t %d \t training accuracy \t %g"%(i, train_accuracy));
       Lnoise1 = generateNoise(image_size, 0, _beta, epsilon2, L);
-      Lnoise2 = generateHkNoise(hk, 0, epsilon3, L);
-      print("step \t %d \t test accuracy \t %g"%(i, accuracy.eval(feed_dict={x: mnist.test.images, y_: mnist.test.labels, noise: Lnoise1, perturbFM: Lnoise2, keep_prob: 1.0})));
-    LapNoise = generateNoise(image_size, Delta2, _beta, epsilon2, L);
-    LapNoise2 = generateHkNoise(hk, Delta3, epsilon3, L); #Add noise when training
-    train_step.run(feed_dict={x: batch[0], y_: batch[1], noise: LapNoise, perturbFM: Lnoise2,keep_prob: 0.5});
+      print("step \t %d \t test accuracy \t %g"%(i, accuracy.eval(feed_dict={x: mnist.test.images, y_: mnist.test.labels, noise: Lnoise1, keep_prob: 1.0})));
+    LapNoise = generateNoise(image_size, Delta2, _beta, epsilon2, L); #Add noise when training 
+    train_step.run(feed_dict={x: batch[0], y_: batch[1], noise: LapNoise,keep_prob: 0.5});
   duration = time.time() - start_time;
   Lnoise1 = generateNoise(image_size, 0, _beta, epsilon2, L);
-  Lnoise2 = generateHkNoise(hk, 0, epsilon3, L);
-  print("test accuracy %g"%accuracy.eval(feed_dict={x: mnist.test.images, y_: mnist.test.labels, noise: Lnoise1, perturbFM: Lnoise2, keep_prob: 1.0})); #print accuracy on test data#
+  print("test accuracy %g"%accuracy.eval(feed_dict={x: mnist.test.images, y_: mnist.test.labels, noise: Lnoise1, keep_prob: 1.0})); #print accuracy on test data#
   print(float(duration)); #print running time duration#
 
 if __name__ == '__main__':
