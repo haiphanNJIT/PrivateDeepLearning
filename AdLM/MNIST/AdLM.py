@@ -279,7 +279,7 @@ def main(_):
       print("step \t %d \t test accuracy \t %g"%(i, accuracy.eval(feed_dict={x: mnist.test.images, y_: mnist.test.labels, noise: Lnoise1, perturbFM: Lnoise2, keep_prob: 1.0})));
     LapNoise = generateNoise(image_size, Delta2, _beta, epsilon2, L);
     LapNoise2 = generateHkNoise(hk, Delta3, epsilon3, L); #Add noise when training
-    train_step.run(feed_dict={x: batch[0], y_: batch[1], noise: LapNoise, perturbFM: Lnoise2,keep_prob: 0.5});
+    train_step.run(feed_dict={x: batch[0], y_: batch[1], noise: LapNoise, perturbFM: LapNoise2,keep_prob: 0.5});
   duration = time.time() - start_time;
   Lnoise1 = generateNoise(image_size, 0, _beta, epsilon2, L);
   Lnoise2 = generateHkNoise(hk, 0, epsilon3, L);
