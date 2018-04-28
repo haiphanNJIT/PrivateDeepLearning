@@ -69,10 +69,10 @@ def main(_):
 
   small_num = 1e-5 # 'a small number'
   large_num = 1e5 # a large number'
-  num_images = 50000 # 'number of images N'
+  num_images = 60000 # 'number of images N'
 
   batch_size = 500 # 'batch_size L'
-  sample_rate = 500/50000 # 'sample rate q = L / N'
+  sample_rate = 500/60000 # 'sample rate q = L / N'
   num_steps = 160000 # 'number of steps T = E * N / L = E / q'
   num_epoch = 24 # 'number of epoches E'
 
@@ -87,7 +87,7 @@ def main(_):
   noise = 0 # 'whether to add noise'
   redistribute = 0 # 'whether to redistribute the noise'
 
-  D = 50000;
+  D = 60000;
   
   '''from tensorflow.examples.tutorials.mnist import input_data;
   mnist = input_data.read_data_sets(FLAGS.data_dir, one_hot=True);'''
