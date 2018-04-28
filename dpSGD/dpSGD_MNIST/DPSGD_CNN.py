@@ -71,8 +71,8 @@ def main(_):
   large_num = 1e5 # a large number'
   num_images = 60000 # 'number of images N'
 
-  batch_size = 500 # 'batch_size L'
-  sample_rate = 500/60000 # 'sample rate q = L / N'
+  batch_size = 600 # 'batch_size L'
+  sample_rate = 600/60000 # 'sample rate q = L / N'
   num_steps = 160000 # 'number of steps T = E * N / L = E / q'
   num_epoch = 24 # 'number of epoches E'
 
