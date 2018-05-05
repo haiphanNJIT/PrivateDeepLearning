@@ -14,7 +14,7 @@ Tensorflow 1.1 or later
 # How it works
 Compute differentially private LRP for MNIST:
 
-python3 dpLRP_MNIST.py 
+python dpLRP_MNIST.py 
 
 Compute differentially private LRP for Cifar10:
 
