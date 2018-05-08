@@ -377,7 +377,7 @@ def main(argv=None):  # pylint: disable=unused-argument
   epsilon1 = 0.25; #epsilon for dpLRP
   epsilon2 = 1.5; #epsilon for the first hidden layer
   epsilon3 = 0.75; #epsilon for the last hidden layer
-  Delta2 = 3*2*10*10*9; #global sensitivity for the first hidden layer
+  Delta2 = 3*2*10*10*9; #global sensitivity for the first hidden layer: 2*|chanels|*|feature_map|*|unit_patch| = 2*3*10*10*3*3
   Delta3 = 10*(hk + 1/4*hk**2); #global sensitivity for the output layer
   LRPfile = os.getcwd() + '/LRP_0_25_v12.txt';
   for i in range(0, len(stair_L)):
