@@ -73,7 +73,7 @@ def main(_):
   ##Hyper-parameter Setting####
   #############################
   hk = 25; #number of hidden units at the last layer
-  Delta2 = 2*14*14*25; #global sensitivity for the first hidden layer
+  Delta2 = 2*14*14*25; #global sensitivity for the first hidden layer: 2*|feature_map|*|unit_patch| = 2*14*14*5*5
   Delta3 = 10*(hk + 1/4 * hk**2); #global sensitivity for the output layer
   D = 60000; #size of the dataset
   L = 1800; #batch size
