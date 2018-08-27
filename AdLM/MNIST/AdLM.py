@@ -33,6 +33,21 @@ def weight_variable(shape):
   initial = tf.truncated_normal(shape, stddev=0.1);
   return tf.Variable(initial);
 
+def max_out(inputs, num_units, axis=None):
+  shape = inputs.get_shape().as_list()
+  if shape[0] is None:
+      shape[0] = -1
+  if axis is None:  # Assume that channel is the last dimension
+      axis = -1
+  num_channels = shape[axis]
+  if num_channels % num_units:
+      raise ValueError('number of features({}) is not '
+                         'a multiple of num_units({})'.format(num_channels, num_units))
+  shape[axis] = num_units
+  shape += [num_channels // num_units]
+  outputs = tf.reduce_max(tf.reshape(inputs, shape), -1, keep_dims=False)
+  return outputs
+  
 def bias_variable(shape):
   initial = tf.constant(0.1, shape=shape);
   return tf.Variable(initial);
@@ -165,7 +180,8 @@ def main(_):
   beta2 = tf.Variable(tf.zeros([hk]))
   BN_norm = tf.nn.batch_normalization(z2,batch_mean2,batch_var2,beta2,scale2,1e-3)
   ###
-  h_fc1 = tf.nn.relu(BN_norm);
+  #h_fc1 = tf.nn.relu(BN_norm);
+  h_fc1 = max_out(BN_norm, hk)
   h_fc1 = tf.clip_by_value(h_fc1, -1, 1) #hidden neurons must be bounded in [-1, 1]
   perturbFM = np.random.laplace(0.0, scale3, hk)
   perturbFM = np.reshape(perturbFM, [hk]);
