@@ -166,7 +166,7 @@ def main(_):
   BN_norm = tf.nn.batch_normalization(z2,batch_mean2,batch_var2,beta2,scale2,1e-3)
   ###
   h_fc1 = tf.nn.relu(BN_norm);
-  h_fc1 = tf.clip_by_value(h_fc1, 0, 1) #hidden neurons must be bounded in [0, 1]
+  h_fc1 = tf.clip_by_value(h_fc1, -1, 1) #hidden neurons must be bounded in [-1, 1]
   perturbFM = np.random.laplace(0.0, scale3, hk)
   perturbFM = np.reshape(perturbFM, [hk]);
   h_fc1 += perturbFM;
