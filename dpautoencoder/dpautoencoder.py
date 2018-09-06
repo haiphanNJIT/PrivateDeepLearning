@@ -37,8 +37,7 @@ class dpAutoEncoder(object):
         self.params = []       # keep track of params for training
         self.last_n_in = hidden_layers_sizes[-1] # the number of hidden neurons in the last hidden layer
         self.pretrain_ops = []; # list of pretrain objective functions for hidden layers
-        self.epsilon2 = 0.01; # epsilon for perturbation of the term (activation_v * self.input) in the cost function of the first hidden layer. This will ensure that private data will not be accessed again. Instead, it will optimize the function through a perturbed self.input #
-        self.epsilon = epsilon - self.epsilon2; # privacy budget epsilon epsilon
+        self.epsilon = epsilon; # privacy budget epsilon epsilon
         self.batch_size = _batch_size; # batch size
 
         # Define the input, output, Laplace noise for the output layer
@@ -55,7 +54,7 @@ class dpAutoEncoder(object):
         self.layers.append(Auto_Layer1)
         self.params.extend(Auto_Layer1.params)
         # get the pretrain objective function
-        self.pretrain_ops.append(Auto_Layer1.get_dp_train_ops(epsilon = self.epsilon, data_size = 50000, first_h = True, learning_rate= 0.01))
+        self.pretrain_ops.append(Auto_Layer1.get_dp_train_ops(epsilon = self.epsilon, data_size = 50000, learning_rate= 0.01))
         ###
         
         # Create the 2nd cauto-encoder layer
@@ -63,7 +62,7 @@ class dpAutoEncoder(object):
         self.layers.append(Auto_Layer2)
         self.params.extend(Auto_Layer2.params)
         # get the pretrain objective function
-        self.pretrain_ops.append(Auto_Layer2.get_dp_train_ops(epsilon = self.epsilon, data_size = 50000, first_h = False, learning_rate= 0.01))
+        self.pretrain_ops.append(Auto_Layer2.get_dp_train_ops(epsilon = self.epsilon, data_size = 50000, learning_rate= 0.01))
         ###
         
         # Create the flat connected hidden layer
