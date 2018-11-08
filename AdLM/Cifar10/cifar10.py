@@ -275,8 +275,12 @@ def TaylorExp(logits, labels):
         Taylor = max(x, 0) - x * z + log(1 + exp(-abs(x)));
         = max(h * W, 0) - (z * h) * W + (math.log(2.0) + 0.5*neg_abs_logits + 1.0/8.0*neg_abs_logits**2)
         = max(h * W, 0) - (z * h) * W + (math.log(2.0) + 0.5*(-abs(h * W)) + 1.0/8.0*(-abs(h * W))**2)
+        = F1 + F2
+        where: F1 = max(h * W, 0) + (math.log(2.0) + 0.5*(-abs(h * W)) + 1.0/8.0*(-abs(h * W))**2) and F2 = - (z * h) * W
         
         To ensure that Taylor is differentially private, we need to perturb all the coefficients, including the terms h * W, z * h * W.
+        Note that h is differentially private, since its computation on top of the DP Affine transformation does not access the original data.
+        Therefore, F1 should be differentially private. We need to preserve DP in F2, which reads the groundtruth label z, as follows:
         
         Since '* z' is an element-wise multiplication and 'z' is one_hot encoding, h can be considered coefficients of the term z * h. By applying Funtional Mechanism, we perturb (z * h) * W as tf.matmul(h + perturbFM, W) * z:
         
