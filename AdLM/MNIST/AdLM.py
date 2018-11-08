@@ -242,8 +242,11 @@ def main(_):
     Taylor = max(y_conv, 0) - y_conv * y_ + log(1 + exp(-abs(y_conv)));
            = max(h_fc1 * W_fc2, 0) - (y_ * h_fc1) * W_fc2 + (math.log(2.0) + 0.5*neg_abs_logits + 1.0/8.0*neg_abs_logits**2)
            = max(h_fc1 * W_fc2, 0) - (y_ * h_fc1) * W_fc2 + (math.log(2.0) + 0.5*(-abs(h_fc1 * W_fc2)) + 1.0/8.0*(-abs(h_fc1 * W_fc2))**2)
+           = F1 + F2
+    where: F1 = max(h_fc1 * W_fc2, 0) + (math.log(2.0) + 0.5*(-abs(h_fc1 * W_fc2)) + 1.0/8.0*(-abs(h_fc1 * W_fc2))**2) and F2 = - (y_ * h_fc1) * W_fc2
     
-    To ensure that Taylor is differentially private, we need to perturb all the coefficients, including the terms h_fc1 * W_fc2, y_ * h_fc1 * W_fc2.
+    To ensure that Taylor is differentially private, we need to perturb all the coefficients, including the terms h_fc1 * W_fc2, y_ * h_fc1 * W_fc2. Note that h_fc1 is differentially private, since its computation on top of the DP Affine transformation does not access the original data.
+    Therefore, F1 should be differentially private. We need to preserve DP in F2 as follows:
     
     Since '* y_' is an element-wise multiplication and 'y_' is one_hot encoding, h_fc1 can be considered coefficients of the term y_ * h_fc1. By applying Funtional Mechanism, we perturb (y_ * h_fc1) * W_fc2 as tf.matmul(h_fc1 + perturbFM, W_fc2) * y_:
     
