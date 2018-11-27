@@ -61,13 +61,13 @@ def max_pool_2x2(x):
 
 def generateIdLMNoise(image_size, Delta2, _beta, epsilon2, L):
     #Initiate the noise for the first hidden layer#
-    W_conv1Noise = np.random.laplace(0.0, Delta2/(L*epsilon2), image_size**2).astype(np.float32);
-    W_conv1Noise = np.reshape(W_conv1Noise, [-1, image_size, image_size, 1]);
+    W_conv1Noise = np.random.laplace(0.0, Delta2/(epsilon2), image_size**2).astype(np.float32);
+    W_conv1Noise = np.reshape(W_conv1Noise/L, [-1, image_size, image_size, 1]);
     return W_conv1Noise;
 
 def generateHkNoise(hk, Delta, epsilon, L):
-    perturbFM = np.random.laplace(0.0, Delta/(epsilon*L), hk)
-    perturbFM = np.reshape(perturbFM, [hk]);
+    perturbFM = np.random.laplace(0.0, Delta/(epsilon), hk)
+    perturbFM = np.reshape(perturbFM/L, [hk]);
     return perturbFM;
 
 def generateNoise(image_size, Delta2, _beta, epsilon2, L):
@@ -77,7 +77,7 @@ def generateNoise(image_size, Delta2, _beta, epsilon2, L):
     #Redistribute the noise#
     for i in range(0, image_size):
         for j in range(0, image_size):
-            W_conv1Noise[0][i][j] = np.random.laplace(0.0, Delta2/(L*(_beta[i+2][j+2])*epsilon2), 1);
+            W_conv1Noise[0][i][j] = np.random.laplace(0.0, Delta2/((_beta[i+2][j+2])*epsilon2), 1)/L;
     ###
     return W_conv1Noise;
 
@@ -105,7 +105,7 @@ def main(_):
   epochs = 2400; #number of epochs
   T = int(D/L*epochs + 1); #number of steps T
   step_for_epoch = int(D/L); #number of steps for one epoch
-  LR = 5e-4; #learning rate
+  LR = 2e-4; #learning rate
   LRPfile = os.getcwd() + '/Relevance_R_0_075.txt';
   #############################
   mnist = input_data.read_data_sets("MNIST_data/", one_hot = True);
@@ -147,7 +147,7 @@ def main(_):
   #Step 4: Randomly initiate the noise, Compute 1/|L| * Delta3 for the output layer#
   
   #Compute the 1/|L| * Delta3 for the last hidden layer#
-  loc, scale3, scale4 = 0., Delta3/(epsilon3*L), Delta3/(uncert*L);
+  loc, scale3, scale4 = 0., Delta3/(epsilon3), Delta3/(uncert);
   ###
   #End Step 4#
   
@@ -180,12 +180,12 @@ def main(_):
   beta2 = tf.Variable(tf.zeros([hk]))
   BN_norm = tf.nn.batch_normalization(z2,batch_mean2,batch_var2,beta2,scale2,1e-3)
   ###
-  #h_fc1 = tf.nn.relu(BN_norm);
-  h_fc1 = max_out(BN_norm, hk)
+  h_fc1 = tf.nn.relu(BN_norm);
+  #h_fc1 = max_out(BN_norm, hk)
   h_fc1 = tf.clip_by_value(h_fc1, -1, 1) #hidden neurons must be bounded in [-1, 1]
-  perturbFM = np.random.laplace(0.0, scale3, hk)
-  perturbFM = np.reshape(perturbFM, [hk]);
-  h_fc1 += perturbFM;
+  perturbFM = np.random.laplace(0.0, scale3, hk * 10)
+  perturbFM = np.reshape(perturbFM/L, [hk, 10]);
+  #h_fc1 += perturbFM;
   #Sometime bound the 2-norm of h_fc1 can help to stablize the training process. Use with care.
   #h_fc1 = tf.clip_by_norm(h_fc1, c[2], 1);
   
@@ -245,24 +245,16 @@ def main(_):
            = F1 + F2
     where: F1 = max(h_fc1 * W_fc2, 0) + (math.log(2.0) + 0.5*(-abs(h_fc1 * W_fc2)) + 1.0/8.0*(-abs(h_fc1 * W_fc2))**2) and F2 = - (y_ * h_fc1) * W_fc2
     
-    To ensure that Taylor is differentially private, we need to perturb all the coefficients, including the terms h_fc1 * W_fc2, y_ * h_fc1 * W_fc2. 
+    To ensure that Taylor is differentially private, we need to perturb all the coefficients, including the term y_ * h_fc1 * W_fc2. 
     Note that h_fc1 is differentially private, since its computation on top of the DP Affine transformation does not access the original data.
     Therefore, F1 should be differentially private. We need to preserve DP in F2, which reads the groundtruth label y_, as follows:
     
-    Since '* y_' is an element-wise multiplication and 'y_' is one_hot encoding, h_fc1 can be considered coefficients of the term y_ * h_fc1. By applying Funtional Mechanism, we perturb (y_ * h_fc1) * W_fc2 as tf.matmul(h_fc1 + perturbFM, W_fc2) * y_:
+    By applying Funtional Mechanism, we perturb (y_ * h_fc1) * W_fc2 as ((y_ * h_fc1) + perturbFM) * W_fc2 = (y_ * h_fc1)*W_fc2 + (perturbFM * W_fc2):
     
-    h_fc1 += perturbFM; where
+    perturbFM = np.random.laplace(0.0, scale3, hk * 10)
+    perturbFM = np.reshape(perturbFM/L, [hk, 10]);
     
-    perturbFM = np.random.laplace(0.0, scale3, hk)
-    perturbFM = np.reshape(perturbFM, [hk]);
-    
-    This has been done in the previous code block:
-    
-    "perturbFM = np.random.laplace(0.0, scale3, hk)
-    perturbFM = np.reshape(perturbFM, [hk]);
-    h_fc1 += perturbFM;"
-    
-    where scale3 = Delta3/(epsilon3*L) = 10*(hk + 1/4 * hk**2)/(epsilon3*L); (Lemma 5)
+    where scale3 = Delta3/(epsilon3) = 10*(hk + 1/4 * hk**2)/(epsilon3); (Lemma 5)
     
     To allow computing gradients at zero, we define custom versions of max and abs functions [Tensorflow].
     
@@ -272,8 +264,8 @@ def main(_):
   cond = (y_conv >= zeros)
   relu_logits = array_ops.where(cond, y_conv, zeros)
   neg_abs_logits = array_ops.where(cond, -y_conv, y_conv)
-  #Taylor = math_ops.add(relu_logits - y_conv * y_, math_ops.log1p(math_ops.exp(neg_abs_logits)))
-  Taylor = math_ops.add(relu_logits - y_conv * y_, math.log(2.0) + 0.5*neg_abs_logits + 1.0/8.0*neg_abs_logits**2)
+  #Taylor = math_ops.add(relu_logits - y_conv * y_, math_ops.log1p(math_ops.exp(neg_abs_logits))) - tf.reduce_sum(perturbFM*W_fc2)
+  Taylor = math_ops.add(relu_logits - y_conv * y_, math.log(2.0) + 0.5*neg_abs_logits + 1.0/8.0*neg_abs_logits**2) - tf.reduce_sum(perturbFM*W_fc2)
   '''Some time, using learning rate decay can help to stablize training process. However, use this carefully, since it may affect the convergent speed.'''
   global_step = tf.Variable(0, trainable=False)
   learning_rate = tf.train.exponential_decay(LR, global_step, 30000, 0.3, staircase=True)
