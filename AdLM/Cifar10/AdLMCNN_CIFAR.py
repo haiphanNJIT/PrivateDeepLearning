@@ -299,7 +299,7 @@ def train(epochs, L, learning_rate, scale3, Delta2, epsilon2, LRPfile):
 
     # Build a Graph that computes the logits predictions from the
     # inference model.
-    logits = inference(images, scale3)
+    logits, perturbW = inference(images, scale3)
 
     # Calculate loss. Apply Taylor Expansion for the output layer
     loss = cifar10.TaylorExp(logits, labels, perturbW)
