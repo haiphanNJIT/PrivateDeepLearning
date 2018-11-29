@@ -232,7 +232,7 @@ def loss(logits, labels):
   return tf.add_n(tf.get_collection('losses'), name='total_loss')
 
 
-def TaylorExp(logits, labels):
+def TaylorExp(logits, labels, perturbW):
     """You can also add L2Loss to all the trainable variables.
         Add summary for "Loss" and "Loss/avg".
         Args:
