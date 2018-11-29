@@ -282,20 +282,12 @@ def TaylorExp(logits, labels, perturbW):
         Note that h is differentially private, since its computation on top of the DP Affine transformation does not access the original data.
         Therefore, F1 should be differentially private. We need to preserve DP in F2, which reads the groundtruth label z, as follows:
         
-        Since '* z' is an element-wise multiplication and 'z' is one_hot encoding, h can be considered coefficients of the term z * h. By applying Funtional Mechanism, we perturb (z * h) * W as tf.matmul(h + perturbFM, W) * z:
-        
-        h += perturbFM; where
-        
-        perturbFM = np.random.laplace(0.0, scale3, hk); # hk = |h|
-        perturbFM = np.reshape(perturbFM, [hk]);
-        
-        This has been done in the last hidden layer in AdLMCNN_CIFAR.inference():
-        
-        "perturbFM = np.random.laplace(0.0, scale3, hk)
-        perturbFM = np.reshape(perturbFM, [hk]);
-        local4 += perturbFM;"
-        
-        where scale3 = Delta3/(epsilon3*batch_size) = 10*(hk + 1/4 * hk**2)/(epsilon3*batch_size); (Lemma 5)
+        By applying Funtional Mechanism, we perturb (z * h) * W as ((z * h) + perturbW) * W = (z * h) * W + (perturbW * W):
+    
+        perturbW = np.random.laplace(0.0, scale3, hk * 10)
+        perturbW = np.reshape(perturbW, [hk, 10]);
+          
+        where scale3 = Delta3/(epsilon3) = 10*(hk + 1/4 * hk**2)/(epsilon3); (Lemma 5)
         
         To allow computing gradients at zero, we define custom versions of max and abs functions [Tensorflow].
         
