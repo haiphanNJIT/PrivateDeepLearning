@@ -306,8 +306,13 @@ def TaylorExp(logits, labels, perturbW):
     relu_logits = array_ops.where(cond, logits, zeros)
     neg_abs_logits = array_ops.where(cond, -logits, logits)
     #Taylor = math_ops.add(relu_logits - y_conv * y_, math_ops.log1p(math_ops.exp(neg_abs_logits)))
-    Taylor = math_ops.add(relu_logits - logits * labels, math.log(2.0) + 0.5*neg_abs_logits + 1.0/8.0*neg_abs_logits**2)
-    cross_entropy_mean = tf.reduce_mean(Taylor, name='cross_entropy');
+    Taylor = math_ops.add(relu_logits - logits * labels, math.log(2.0) + 0.5*neg_abs_logits + 1.0/8.0*neg_abs_logits**2);
+    
+    zeros1 = array_ops.zeros_like(perturbW, dtype=perturbW.dtype)
+    cond1 = (perturbW >= zeros1)
+    perturbW = array_ops.where(cond1, perturbW, zeros1)
+    
+    cross_entropy_mean = tf.reduce_mean(Taylor, name='cross_entropy') + tf.reduce_sum(perturbW, name = 'perturbW');
     
     tf.add_to_collection('losses', cross_entropy_mean)
     
