@@ -190,9 +190,7 @@ def inference(images, scale3):
     ###
     local4 = max_out(BN_norm, hk)
     local4 = tf.clip_by_value(local4, -1, 1) # hidden neurons must be bounded in [-1, 1]
-    perturbFM = np.random.laplace(0.0, scale3, hk)
-    perturbFM = np.reshape(perturbFM, [hk]);
-    local4 += perturbFM; # perturb hidden neurons, which are considered coefficients in the differentially private logistic regression layer
+    #local4 += perturbFM; # perturb hidden neurons, which are considered coefficients in the differentially private logistic regression layer
     cifar10._activation_summary(local4)
     
   """print(images.get_shape());
@@ -205,13 +203,15 @@ def inference(images, scale3):
   # We don't apply softmax here because 
   # tf.nn.sparse_softmax_cross_entropy_with_logits accepts the unscaled logits 
   # and performs the softmax internally for efficiency.
+  perturbFM = np.random.laplace(0.0, scale3, hk*10)
+  perturbFM = np.reshape(perturbFM, [hk, 10]);
   weights = cifar10._variable_with_weight_decay('weights', [hk, 10],
                                           stddev=1/(hk*1.0), wd=0.0)
   biases = cifar10._variable_on_cpu('biases', [10],
                               tf.constant_initializer(0.0))
   softmax_linear = tf.add(tf.matmul(local4, weights), biases, name=scope.name)
   cifar10._activation_summary(softmax_linear)
-  return softmax_linear
+  return softmax_linear, perturbFM*weights
 
 def test_inference(images):
     with tf.variable_scope('conv1') as scope:
@@ -302,7 +302,7 @@ def train(epochs, L, learning_rate, scale3, Delta2, epsilon2, LRPfile):
     logits = inference(images, scale3)
 
     # Calculate loss. Apply Taylor Expansion for the output layer
-    loss = cifar10.TaylorExp(logits, labels)
+    loss = cifar10.TaylorExp(logits, labels, perturbW)
 
     # Build a Graph that trains the model with one batch of examples and
     # updates the model parameters.
