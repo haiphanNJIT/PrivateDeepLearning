@@ -109,7 +109,7 @@ def block(input, layers, in_features, growth, is_training, keep_prob):
         features += growth
     return current, features
 
-def inference(images, scale3):
+def inference(images, scale3, perturbFM):
   """Build the CIFAR-10 model.
   Args:
     images: Images returned from distorted_inputs() or inputs().
@@ -203,8 +203,8 @@ def inference(images, scale3):
   # We don't apply softmax here because 
   # tf.nn.sparse_softmax_cross_entropy_with_logits accepts the unscaled logits 
   # and performs the softmax internally for efficiency.
-  perturbFM = np.random.laplace(0.0, scale3, hk*10)
-  perturbFM = np.reshape(perturbFM, [hk, 10]);
+  #perturbFM = np.random.laplace(0.0, scale3, hk*10)
+  #perturbFM = np.reshape(perturbFM, [hk, 10]);
   weights = cifar10._variable_with_weight_decay('weights', [hk, 10],
                                           stddev=1/(hk*1.0), wd=0.0)
   biases = cifar10._variable_on_cpu('biases', [10],
@@ -288,7 +288,7 @@ def test_inference(images):
     cifar10._activation_summary(softmax_linear)
     return softmax_linear
 
-def train(epochs, L, learning_rate, scale3, Delta2, epsilon2, LRPfile):
+def train(epochs, L, learning_rate, scale3, Delta2, epsilon2, LRPfile, perturbFM):
   """Train CIFAR-10 for a number of steps."""
   with tf.Graph().as_default():
     global_step = tf.Variable(0, trainable=False)
@@ -299,7 +299,7 @@ def train(epochs, L, learning_rate, scale3, Delta2, epsilon2, LRPfile):
 
     # Build a Graph that computes the logits predictions from the
     # inference model.
-    logits, perturbW = inference(images, scale3)
+    logits, perturbW = inference(images, scale3, perturbFM)
 
     # Calculate loss. Apply Taylor Expansion for the output layer
     loss = cifar10.TaylorExp(logits, labels, perturbW)
@@ -379,11 +379,14 @@ def main(argv=None):  # pylint: disable=unused-argument
   epsilon3 = 0.75; #epsilon for the last hidden layer
   Delta2 = 3*2*10*10*9; #global sensitivity for the first hidden layer: 2*|chanels|*|feature_map|*|unit_patch| = 2*3*10*10*3*3
   Delta3 = 10*(hk + 1/4*hk**2); #global sensitivity for the output layer
-  LRPfile = os.getcwd() + '/LRP_0_25_v12.txt';
+  LRPfile = os.getcwd() + '/LRP_0_25_v12.txt';  
+  scale3 = Delta3/(epsilon3); #Laplace noise scale
+  perturbFM = np.random.laplace(0.0, scale3, hk*10)
+  perturbFM = np.reshape(perturbFM, [hk, 10]);
   for i in range(0, len(stair_L)):
-    scale3 = Delta3/(epsilon3*stair_L[i]); #Laplace noise scale
     for j in range(0, stair_iters[i]):
-      train(stair_epochs[i], stair_L[i], stair_learning_rate[i], scale3, Delta2, epsilon2, LRPfile)
+      perturbFM_2 = perturbFM/stair_L[i]
+      train(stair_epochs[i], stair_L[i], stair_learning_rate[i], scale3, Delta2, epsilon2, LRPfile, perturbFM_2)
       time.sleep(5)
 
 if __name__ == '__main__':
