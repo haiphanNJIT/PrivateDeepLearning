@@ -287,7 +287,7 @@ def TaylorExp(logits, labels, perturbW):
         perturbW = np.random.laplace(0.0, scale3, hk * 10)
         perturbW = np.reshape(perturbW, [hk, 10]);
           
-        where scale3 = Delta3/(epsilon3) = 10*(hk + 1/4 * hk**2)/(epsilon3); (Lemma 5)
+        where scale3 = Delta3/(epsilon3*L) = 10*(hk + 1/4 * hk**2)/(epsilon3*L); (Lemma 5)
         
         To allow computing gradients at zero, we define custom versions of max and abs functions [Tensorflow].
         
