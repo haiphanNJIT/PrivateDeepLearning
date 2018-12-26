@@ -105,7 +105,7 @@ def main(_):
   epochs = 2400; #number of epochs
   T = int(D/L*epochs + 1); #number of steps T
   step_for_epoch = int(D/L); #number of steps for one epoch
-  LR = 2e-4; #learning rate
+  LR = 3e-4; #learning rate
   LRPfile = os.getcwd() + '/Relevance_R_0_075.txt';
   #############################
   mnist = input_data.read_data_sets("MNIST_data/", one_hot = True);
