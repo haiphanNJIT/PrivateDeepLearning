@@ -341,16 +341,16 @@ def train():
     gw_W2 = tf.clip_by_norm(gw_W2,clip_bound)
 
     #perturb
-    gw_K1 += tf.random_normal(shape=tf.shape(gw_K1), mean=0.0, stddev = sigma * (sensitivity**2), dtype=tf.float32)
-    gw_K2 += tf.random_normal(shape=tf.shape(gw_K2), mean=0.0, stddev = sigma * (sensitivity**2), dtype=tf.float32)
-    gw_K3 += tf.random_normal(shape=tf.shape(gw_K3), mean=0.0, stddev = sigma * (sensitivity**2), dtype=tf.float32)
-    gw_W1 += tf.random_normal(shape=tf.shape(gw_W1), mean=0.0, stddev = sigma * (sensitivity**2), dtype=tf.float32)
-    gw_W2 += tf.random_normal(shape=tf.shape(gw_W2), mean=0.0, stddev = sigma * (sensitivity**2), dtype=tf.float32)
-    gb1 += tf.random_normal(shape=tf.shape(gb1), mean=0.0, stddev = sigma * (sensitivity**2), dtype=tf.float32)
-    gb2 += tf.random_normal(shape=tf.shape(gb2), mean=0.0, stddev = sigma * (sensitivity**2), dtype=tf.float32)
-    gb3 += tf.random_normal(shape=tf.shape(gb3), mean=0.0, stddev = sigma * (sensitivity**2), dtype=tf.float32)
-    gb4 += tf.random_normal(shape=tf.shape(gb4), mean=0.0, stddev = sigma * (sensitivity**2), dtype=tf.float32)
-    gb5 += tf.random_normal(shape=tf.shape(gb5), mean=0.0, stddev = sigma * (sensitivity**2), dtype=tf.float32)
+    gw_K1 += tf.random_normal(shape=tf.shape(gw_K1), mean=0.0, stddev = (sigma * sensitivity)**2, dtype=tf.float32)
+    gw_K2 += tf.random_normal(shape=tf.shape(gw_K2), mean=0.0, stddev = (sigma * sensitivity)**2, dtype=tf.float32)
+    gw_K3 += tf.random_normal(shape=tf.shape(gw_K3), mean=0.0, stddev = (sigma * sensitivity)**2, dtype=tf.float32)
+    gw_W1 += tf.random_normal(shape=tf.shape(gw_W1), mean=0.0, stddev = (sigma * sensitivity)**2, dtype=tf.float32)
+    gw_W2 += tf.random_normal(shape=tf.shape(gw_W2), mean=0.0, stddev = (sigma * sensitivity)**2, dtype=tf.float32)
+    gb1 += tf.random_normal(shape=tf.shape(gb1), mean=0.0, stddev = (sigma * sensitivity)**2, dtype=tf.float32)
+    gb2 += tf.random_normal(shape=tf.shape(gb2), mean=0.0, stddev = (sigma * sensitivity)**2, dtype=tf.float32)
+    gb3 += tf.random_normal(shape=tf.shape(gb3), mean=0.0, stddev = (sigma * sensitivity)**2, dtype=tf.float32)
+    gb4 += tf.random_normal(shape=tf.shape(gb4), mean=0.0, stddev = (sigma * sensitivity)**2, dtype=tf.float32)
+    gb5 += tf.random_normal(shape=tf.shape(gb5), mean=0.0, stddev = (sigma * sensitivity)**2, dtype=tf.float32)
     
     # apply gradients and keep tracking moving average of the parameters
     apply_gradient_op = opt.apply_gradients([(gw_K1,kernel1),(gb1,biases1),(gw_K2,kernel2),(gb2,biases2),(gw_K3,kernel3),(gb3,biases3),(gw_W1,weights1),(gb4,biases4),(gw_W2,weights2),(gb5,biases5)], global_step=global_step);
