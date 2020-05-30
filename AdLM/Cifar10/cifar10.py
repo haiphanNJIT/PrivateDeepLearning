@@ -302,9 +302,9 @@ def TaylorExp(logits, labels, perturbW):
     
     zeros1 = array_ops.zeros_like(perturbW, dtype=perturbW.dtype)
     cond1 = (perturbW >= zeros1)
-    perturbW = array_ops.where(cond1, perturbW, zeros1)
+    perturbW = array_ops.where(cond1, perturbW, -perturbW)
     
-    cross_entropy_mean = tf.reduce_mean(Taylor, name='cross_entropy') + tf.reduce_sum(perturbW, name = 'perturbW');
+    cross_entropy_mean = tf.reduce_mean(Taylor, name='cross_entropy') + tf.reduce_mean(perturbW, name = 'perturbW');
     
     tf.add_to_collection('losses', cross_entropy_mean)
     
