@@ -1,0 +1,43 @@
+image_size = 64
+hk = 256
+num_classes = 200
+effective_batch_size = 225*20 = 4500
+
+enc_h_size = 32
+enc_kernel_size = 7
+enc_filters = 64
+
+dp_epsilon = 1.0
+epsilon2 = 4.0
+eps3_benign = epsilon3 = 1.0
+total_eps = epsilon2 + epsilon3 = 5
+epsilon2_update = epsilon2/(1.0 + 1.0/_gamma + 1/_gamma_x)
+scale3_benign = Delta3_benign/(eps3_benign*effective_batch_size)
+scale3_benign = 512 / (epsilon3 * 4500)
+
+Delta2 = 3 * (enc_h_size * enc_h_size+2) * (enc_kernel_size**2)
+Delta3_benign = 2*hk = 512
+
+fgsm_eps (training) = 0.05
+
+perturbFM, goes to last fc layer during training, is:
+    perturbFM = np.random.laplace(0.0, scale3_benign, hk*num_classes)
+
+Noise (noise), goes to benign and adv input during training, is:
+    Noise = generateIdLMNoise(image_size, Delta2, epsilon2_update, effective_batch_size)    
+
+Noise_test (adv_noise), used for (1) generate adv samples, add into input; (2) pretrain auto-encoding layer, add into adv input, is:
+    Noise_test = generateIdLMNoise(image_size, 0, epsilon2_update, effective_batch_size)
+
+perturbFM_h, goes to first hidden layer during training, is:
+    perturbFM_h = np.random.laplace(0.0, 2*Delta2/(epsilon2_update*effective_batch_size), enc_h_size*enc_h_size*enc_filters)
+
+dp_mult, used to compute certify acc, is:
+    dp_mult = (Delta2 / (effective_batch_size * epsilon2_update)) / (delta_r / dp_epsilon) + (2 * Delta2 / (effective_batch_size * epsilon2_update)) / (delta_h / dp_epsilon)
+where:
+    delta_r = fgsm_eps * (image_size ** 2)
+    delta_h = _sensitivityW * (enc_h_size ** 2)
+
+These are used in testing:
+    _BenignLNoise = generateIdLMNoise(image_size, Delta2, epsilon2_update, effective_batch_size) / 10 + Noise
+    _perturbFM_h = np.random.laplace(0.0, 2*Delta2/(epsilon2_update*effective_batch_size), enc_h_size*enc_h_size*enc_filters) / 10 + perturbFM_h
