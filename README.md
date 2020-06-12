@@ -1,6 +1,6 @@
 # Private Deep Learning under Model Attacks
 
-# AdLM, pCDBN, and dp-Autoencoder
+# AdLM, pCDBN, dp-Autoencoder, and StoBatch
 
 These are the codes used in the papers titled: (1) Adaptive Laplace Mechanism: Differential Privacy Preservation in Deep Learning (https://arxiv.org/abs/1709.05750), (2) Preserving Differential Privacy in Convolutional Deep Belief Networks (https://arxiv.org/abs/1706.08839), and (3) Differential Privacy Preservation for Deep Auto-Encoders: an Application of Human Behavior Prediction (https://dl.acm.org/citation.cfm?id=3016005). 
 
