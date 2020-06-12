@@ -54,8 +54,7 @@ python3 CifarEval.py
 
 The default hyper-parameters can be edited in each main() file.
 
-# StoBatch
-Code for paper "Scalable Differential Privacy with Certified Robustness in Adversarial Learning" in ICML2020: https://128.84.21.199/pdf/1903.09822.pdf
+# StoBatch: "Scalable Differential Privacy with Certified Robustness in Adversarial Learning" in ICML2020, https://128.84.21.199/pdf/1903.09822.pdf
 
 # Requirements:
 Python 3.x (tested with 3.5.2)
