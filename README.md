@@ -95,15 +95,17 @@ About the "parameter_settings.txt": This described the core parameters we used i
 # Cites
 If you use this code, please cite the following papers:
 
-[1] Scalable Differential Privacy with Certified Robustness in Adversarial Learning. NhatHai Phan, My T. Thai, Han Hu, Ruoming Jin, Tong Sun, and Dejing Dou. The 37th International Conference on Machine Learning (ICML'20), July 12 - 18, 2020. https://128.84.21.199/pdf/1903.09822.pdf
+[1] Scalable Differential Privacy with Certified Robustness in Adversarial Learning. 
+NhatHai Phan, My T. Thai, Han Hu, Ruoming Jin, Tong Sun, and Dejing Dou. The 37th International Conference on Machine Learning (ICML'20), July 12 - 18, 2020. https://128.84.21.199/pdf/1903.09822.pdf
 
-[2] Heterogeneous Gaussian Mechanism: Preserving Differential Privacy in Deep Learning with Provable Robustness. NhatHai Phan, Minh Vu, Yang Liu, Ruoming Jin, Xintao Wu, Dejing Dou, and My T. Thai. The 28th International Joint Conference on Artificial Intelligence (IJCAI'19), August 10-16, 2019, Macao, China. https://arxiv.org/pdf/1906.01444.pdf
+[2] Heterogeneous Gaussian Mechanism: Preserving Differential Privacy in Deep Learning with Provable Robustness. 
+NhatHai Phan, Minh Vu, Yang Liu, Ruoming Jin, Xintao Wu, Dejing Dou, and My T. Thai. The 28th International Joint Conference on Artificial Intelligence (IJCAI'19), August 10-16, 2019, Macao, China. https://arxiv.org/pdf/1906.01444.pdf
 
 [3] Adaptive Laplace Mechanism: Differential Privacy Preservation in Deep Learning
-NhatHai Phan, Xintao Wu, Han Hu, Dejing Dou. https://arxiv.org/abs/1709.05750.
+NhatHai Phan, Xintao Wu, Han Hu, Dejing Dou. IEEE ICDM'17, New Orleans, USA 18-21 November 2017. https://arxiv.org/abs/1709.05750.
 
 [4] Preserving Differential Privacy in Convolutional Deep Belief Networks
-NhatHai Phan, Xintao Wu, Dejing Dou. https://arxiv.org/abs/1706.08839. 
+NhatHai Phan, Xintao Wu, Dejing Dou. Machine Learning 2017, ECML-PKDD Journal Track, Skopje, Macedonia 18-22 Sep 2017. https://arxiv.org/abs/1706.08839. 
 
 [5] Differential Privacy Preservation for Deep Auto-Encoders: an Application of Human Behavior Prediction
 NhatHai Phan, Yue Wang, Xintao Wu, and Dejing Dou. Proceedings of the 30th AAAI Conference on Artificial Intelligence (AAAI-16).
