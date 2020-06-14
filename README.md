@@ -108,4 +108,4 @@ NhatHai Phan, Xintao Wu, Han Hu, Dejing Dou. IEEE ICDM'17, New Orleans, USA 18-2
 NhatHai Phan, Xintao Wu, Dejing Dou. Machine Learning 2017, ECML-PKDD Journal Track, Skopje, Macedonia 18-22 Sep 2017. https://arxiv.org/abs/1706.08839. 
 
 [5] Differential Privacy Preservation for Deep Auto-Encoders: an Application of Human Behavior Prediction
-NhatHai Phan, Yue Wang, Xintao Wu, and Dejing Dou. Proceedings of the 30th AAAI Conference on Artificial Intelligence (AAAI-16).
+NhatHai Phan, Yue Wang, Xintao Wu, and Dejing Dou. Proceedings of the 30th AAAI Conference on Artificial Intelligence (AAAI-16). https://dl.acm.org/citation.cfm?id=3016005
