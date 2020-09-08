@@ -2,7 +2,7 @@
 
 # AdLM, pCDBN, dp-Autoencoder, and StoBatch
 
-These are the codes used in the papers titled: (1) Adaptive Laplace Mechanism: Differential Privacy Preservation in Deep Learning (https://arxiv.org/abs/1709.05750), (2) Preserving Differential Privacy in Convolutional Deep Belief Networks (https://arxiv.org/abs/1706.08839), and (3) Differential Privacy Preservation for Deep Auto-Encoders: an Application of Human Behavior Prediction (https://dl.acm.org/citation.cfm?id=3016005). 
+These are the codes used in the papers titled: (1) Scalable Differential Privacy with Certified Robustness in Adversarial Learning (https://proceedings.icml.cc/static/paper_files/icml/2020/3815-Paper.pdf), (2) Adaptive Laplace Mechanism: Differential Privacy Preservation in Deep Learning (https://arxiv.org/abs/1709.05750), (3) Preserving Differential Privacy in Convolutional Deep Belief Networks (https://arxiv.org/abs/1706.08839), and (4) Differential Privacy Preservation for Deep Auto-Encoders: an Application of Human Behavior Prediction (https://dl.acm.org/citation.cfm?id=3016005). 
 
 # Requirement
 The software is written in tensorflow. It requires the following packages:
