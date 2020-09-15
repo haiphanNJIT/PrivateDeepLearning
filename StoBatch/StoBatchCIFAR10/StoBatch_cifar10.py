@@ -594,7 +594,8 @@ def train(cifar10_data, epochs, L, learning_rate, scale3, Delta2, epsilon2, eps2
     parameter_dict['_sensitivityW'] = _sensitivityW
     delta_h = _sensitivityW*(14**2)
     parameter_dict['delta_h'] = delta_h
-    dp_mult = (Delta2/(L*epsilon2_update))/(delta_r / dp_epsilon) + (2*Delta2/(L*epsilon2_update))/(delta_h / dp_epsilon)
+    #dp_mult = (Delta2/(L*epsilon2_update))/(delta_r / dp_epsilon) + (2*Delta2/(L*epsilon2_update))/(delta_h / dp_epsilon)
+    dp_mult = (Delta2*dp_epsilon) / (L*epsilon2_update * (delta_h / 2 + delta_r))
     parameter_dict['dp_mult'] = dp_mult
 
     # place test-time inference into CPU
