@@ -420,9 +420,9 @@ def PDP_resnet_with_pretrain_adv(TIN_data, resnet_params, train_params, params_t
     delta_r = train_params.fgsm_eps * (train_params.image_size ** 2)
     _sensitivityW = sess.run(sensitivity)
     delta_h = _sensitivityW*(train_params.enc_h_size ** 2)
-    dp_mult = (train_params.Delta2 / (train_params.effective_batch_size * epsilon2_update)) / (delta_r / train_params.dp_epsilon) + \
-      (2 * train_params.Delta2 / (train_params.effective_batch_size * epsilon2_update))/(delta_h / train_params.dp_epsilon)
-    
+    #dp_mult = (train_params.Delta2 / (train_params.effective_batch_size * epsilon2_update)) / (delta_r / train_params.dp_epsilon) + \
+    #  (2 * train_params.Delta2 / (train_params.effective_batch_size * epsilon2_update))/(delta_h / train_params.dp_epsilon)
+    dp_mult = (train_params.Delta2*train_params.dp_epsilon) / (train_params.effective_batch_size*epsilon2_update * (delta_h / 2 + delta_r))
     # save some valus for testing
     params_to_save['epsilon2_update'] = epsilon2_update
     params_to_save['dp_mult'] = dp_mult
