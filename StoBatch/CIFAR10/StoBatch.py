@@ -513,7 +513,8 @@ def train(cifar10_data, epochs, L, learning_rate, scale3, Delta2, epsilon2, eps2
     delta_h = _sensitivityW*(14**2)
     #delta_h = 1.0 * delta_r; #sensitivity*(14**2) = sensitivity*(\beta**2) can also be used
     #dp_mult = (Delta2/(L*epsilon2))/(delta_r / dp_epsilon) + (2*Delta2/(L*epsilon2))/(delta_h / dp_epsilon)
-    dp_mult = (Delta2/(L*epsilon2_update))/(delta_r / dp_epsilon) + (2*Delta2/(L*epsilon2_update))/(delta_h / dp_epsilon)
+    #dp_mult = (Delta2/(L*epsilon2_update))/(delta_r / dp_epsilon) + (2*Delta2/(L*epsilon2_update))/(delta_h / dp_epsilon)
+    dp_mult = (Delta2*dp_epsilon) / (L*epsilon2_update * (delta_h / 2 + delta_r))
     
     dynamic_eps = tf.placeholder(tf.float32);
     """y_test = inference(x, FM_h, params)
