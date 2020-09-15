@@ -546,7 +546,8 @@ def train(alpha, eps2_ratio, gen_ratio, fgsm_eps, LR, logfile):
     print(epsilon2_update)
     _sensitivityW = sess.run(sensitivity)
     delta_h = _sensitivityW*(14**2)
-    dp_mult = (Delta2/(L*epsilon2_update))/(delta_r / dp_epsilon) + (2*Delta2/(L*epsilon2_update))/(delta_h / dp_epsilon)
+    #dp_mult = (Delta2/(L*epsilon2_update))/(delta_r / dp_epsilon) + (2*Delta2/(L*epsilon2_update))/(delta_h / dp_epsilon)
+    dp_mult = (Delta2*dp_epsilon) / (L*epsilon2_update * (delta_h / 2 + delta_r))
     #############################
     
     iterativeStep = 100
