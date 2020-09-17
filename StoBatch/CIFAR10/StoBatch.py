@@ -480,8 +480,8 @@ def train(cifar10_data, epochs, L, learning_rate, scale3, Delta2, epsilon2, eps2
     softmax_y_conv = tf.nn.softmax(y_conv)
     y_ = tf.placeholder(tf.float32, [None, 10]);
     
-    adv_x += adv_noise
-    y_adv_conv = inference(adv_x, FM_h, params)
+    adv_x_image = adv_x + adv_noise
+    y_adv_conv = inference(adv_x_image, FM_h, params)
     adv_y_ = tf.placeholder(tf.float32, [None, 10]);
     
     # Calculate loss. Apply Taylor Expansion for the output layer
