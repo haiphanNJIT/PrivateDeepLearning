@@ -406,7 +406,7 @@ def PDP_resnet_test(TIN_data, resnet_params, train_params, test_params, all_para
             robustness_from_argmax = robustness.robustness_size_argmax(counts=predictions_form_argmax[j],
                                                                       eta=0.05, dp_attack_size=fgsm_eps, 
                                                                       dp_epsilon=train_params.dp_epsilon, dp_delta=0.05, 
-                                                                      dp_mechanism='laplace') / dp_mult
+                                                                      dp_mechanism='laplace') * dp_mult
             is_robust.append(robustness_from_argmax >= fgsm_eps)
           adv_acc_dict[atk] += np.sum(is_correct)*1.0/test_params.test_batch_size
           robust_adv_acc_dict[atk] += np.sum([a and b for a,b in zip(is_robust, is_correct)])*1.0/np.sum(is_robust)
