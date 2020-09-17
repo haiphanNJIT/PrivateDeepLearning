@@ -46,7 +46,7 @@ def _laplace_robustness_size(p_max_lb, p_sec_ub, attack_size, dp_epsilon):
         # we're not even robust to the measurement error...
         return 0.0
 
-    return attack_size * math.log(p_max_lb/p_sec_ub) / (2 * dp_epsilon)
+    return math.log(p_max_lb/p_sec_ub) / (2 * dp_epsilon)
 
 def _guaussian_mech_mult(delta):
     return math.sqrt(2 * math.log(1.25 / delta))
