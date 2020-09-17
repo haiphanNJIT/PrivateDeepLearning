@@ -327,7 +327,7 @@ def train(alpha, eps2_ratio, gen_ratio, fgsm_eps, LR, logfile):
     sensitivity = tf.reduce_max(sing_vals)
     gamma = 2*(14*14 + 2)*25/(L*sensitivity)
     
-    dp_epsilon=1.0 #0.1
+    dp_epsilon=0.005 #0.1
     delta_r = fgsm_eps*(image_size**2);
     #delta_h = 1.0 * delta_r; #sensitivity*(14**2) = sensitivity*(\beta**2) can also be used
     #dp_mult = (Delta2/(L*epsilon2))/(delta_r / dp_epsilon) + (2*Delta2/(L*epsilon2))/(delta_h / dp_epsilon)
@@ -547,7 +547,7 @@ def train(alpha, eps2_ratio, gen_ratio, fgsm_eps, LR, logfile):
     _sensitivityW = sess.run(sensitivity)
     delta_h = _sensitivityW*(14**2)
     #dp_mult = (Delta2/(L*epsilon2_update))/(delta_r / dp_epsilon) + (2*Delta2/(L*epsilon2_update))/(delta_h / dp_epsilon)
-    dp_mult = (Delta2*dp_epsilon) / (L*epsilon2_update * (delta_h / 2 + delta_r))
+    dp_mult = (Delta2) / (L*epsilon2_update * (delta_h / 2 + delta_r))
     #############################
     
     iterativeStep = 100
@@ -741,7 +741,7 @@ def train(alpha, eps2_ratio, gen_ratio, fgsm_eps, LR, logfile):
             is_robust = []
             for j in range(test_size):
                 is_correct.append(np.argmax(mnist.test.labels[j]) == np.argmax(final_predictions[j]))
-                robustness_from_argmax = robustness.robustness_size_argmax(counts=predictions_form_argmax[j],eta=0.05,dp_attack_size=fgsm_eps, dp_epsilon=1.0, dp_delta=0.05, dp_mechanism='laplace') / (dp_mult)
+                robustness_from_argmax = robustness.robustness_size_argmax(counts=predictions_form_argmax[j],eta=0.05,dp_attack_size=fgsm_eps, dp_epsilon=1.0, dp_delta=0.05, dp_mechanism='laplace') * dp_mult
                 is_robust.append(robustness_from_argmax >= fgsm_eps)
             acc = np.sum(is_correct)*1.0/test_size
             robust_acc = np.sum([a and b for a,b in zip(is_robust, is_correct)])*1.0/np.sum(is_robust)
@@ -788,7 +788,7 @@ def train(alpha, eps2_ratio, gen_ratio, fgsm_eps, LR, logfile):
                     is_robust = []
                     for j in range(test_size):
                         is_correct.append(np.argmax(mnist.test.labels[j]) == np.argmax(final_predictions[j]))
-                        robustness_from_argmax = robustness.robustness_size_argmax(counts=predictions_form_argmax[j],eta=0.05,dp_attack_size=fgsm_eps, dp_epsilon=1.0, dp_delta=0.05, dp_mechanism='laplace') / (dp_mult)
+                        robustness_from_argmax = robustness.robustness_size_argmax(counts=predictions_form_argmax[j],eta=0.05,dp_attack_size=fgsm_eps, dp_epsilon=1.0, dp_delta=0.05, dp_mechanism='laplace') * dp_mult
                         is_robust.append(robustness_from_argmax >= fgsm_eps)
                     adv_acc_dict[atk] = np.sum(is_correct)*1.0/test_size
                     robust_adv_acc_dict[atk] = np.sum([a and b for a,b in zip(is_robust, is_correct)])*1.0/np.sum(is_robust)
