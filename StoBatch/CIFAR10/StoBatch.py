@@ -502,7 +502,7 @@ def train(cifar10_data, epochs, L, learning_rate, scale3, Delta2, epsilon2, eps2
     sess = tf.Session(config=tf.ConfigProto(log_device_placement=False))
     
     sess.run(kernel1.initializer)
-    dp_epsilon=1.0
+    dp_epsilon=0.005
     _gamma = sess.run(gamma)
     _gamma_x = Delta2/L
     epsilon2_update = epsilon2/(1.0 + 1.0/_gamma + 1/_gamma_x)
@@ -514,7 +514,7 @@ def train(cifar10_data, epochs, L, learning_rate, scale3, Delta2, epsilon2, eps2
     #delta_h = 1.0 * delta_r; #sensitivity*(14**2) = sensitivity*(\beta**2) can also be used
     #dp_mult = (Delta2/(L*epsilon2))/(delta_r / dp_epsilon) + (2*Delta2/(L*epsilon2))/(delta_h / dp_epsilon)
     #dp_mult = (Delta2/(L*epsilon2_update))/(delta_r / dp_epsilon) + (2*Delta2/(L*epsilon2_update))/(delta_h / dp_epsilon)
-    dp_mult = (Delta2*dp_epsilon) / (L*epsilon2_update * (delta_h / 2 + delta_r))
+    dp_mult = (Delta2) / (L*epsilon2_update * (delta_h / 2 + delta_r))
     
     dynamic_eps = tf.placeholder(tf.float32);
     """y_test = inference(x, FM_h, params)
@@ -679,7 +679,7 @@ def train(cifar10_data, epochs, L, learning_rate, scale3, Delta2, epsilon2, eps2
           is_robust = []
           for j in range(test_size):
               is_correct.append(np.argmax(cifar10_data.test.labels[j]) == np.argmax(final_predictions[j]))
-              robustness_from_argmax = robustness.robustness_size_argmax(counts=predictions_form_argmax[j],eta=0.05,dp_attack_size=fgsm_eps, dp_epsilon=1.0, dp_delta=0.05, dp_mechanism='laplace') / dp_mult
+              robustness_from_argmax = robustness.robustness_size_argmax(counts=predictions_form_argmax[j],eta=0.05,dp_attack_size=fgsm_eps, dp_epsilon=1.0, dp_delta=0.05, dp_mechanism='laplace') * dp_mult
               is_robust.append(robustness_from_argmax >= fgsm_eps)
           acc = np.sum(is_correct)*1.0/test_size
           robust_acc = np.sum([a and b for a,b in zip(is_robust, is_correct)])*1.0/np.sum(is_robust)
@@ -729,7 +729,7 @@ def train(cifar10_data, epochs, L, learning_rate, scale3, Delta2, epsilon2, eps2
                   is_robust = []
                   for j in range(test_bach_size):
                       is_correct.append(np.argmax(test_bach[1][j]) == np.argmax(final_predictions[j]))
-                      robustness_from_argmax = robustness.robustness_size_argmax(counts=predictions_form_argmax[j],eta=0.05,dp_attack_size=fgsm_eps, dp_epsilon=dp_epsilon, dp_delta=0.05, dp_mechanism='laplace') / dp_mult
+                      robustness_from_argmax = robustness.robustness_size_argmax(counts=predictions_form_argmax[j],eta=0.05,dp_attack_size=fgsm_eps, dp_epsilon=dp_epsilon, dp_delta=0.05, dp_mechanism='laplace') * dp_mult
                       is_robust.append(robustness_from_argmax >= fgsm_eps)
                   adv_acc_dict[atk] = np.sum(is_correct)*1.0/test_bach_size
                   robust_adv_acc_dict[atk] = np.sum([a and b for a,b in zip(is_robust, is_correct)])*1.0/np.sum(is_robust)
