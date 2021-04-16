@@ -161,14 +161,14 @@ def main(_):
   #sensitivity = 2 * FLAGS.clip_bound #adjacency matrix with one tuple different
   sensitivity = clip_bound #adjacency matrix with one more tuple
   
-  gw_W1 += tf.random_normal(shape=tf.shape(gw_W1), mean=0.0, stddev = (sigma * sensitivity)**2, dtype=tf.float32)
-  gb1 += tf.random_normal(shape=tf.shape(gb1), mean=0.0, stddev = (sigma * sensitivity)**2, dtype=tf.float32)
-  gw_W2 += tf.random_normal(shape=tf.shape(gw_W2), mean=0.0, stddev = (sigma * sensitivity)**2, dtype=tf.float32)
-  gb2 += tf.random_normal(shape=tf.shape(gb2), mean=0.0, stddev = (sigma * sensitivity)**2, dtype=tf.float32)
-  gw_Wf1 += tf.random_normal(shape=tf.shape(gw_Wf1), mean=0.0, stddev = (sigma * sensitivity)**2, dtype=tf.float32)
-  gbf1 += tf.random_normal(shape=tf.shape(gbf1), mean=0.0, stddev = (sigma * sensitivity)**2, dtype=tf.float32)
-  gw_Wf2 += tf.random_normal(shape=tf.shape(gw_Wf2), mean=0.0, stddev = (sigma * sensitivity)**2, dtype=tf.float32)
-  gbf2 += tf.random_normal(shape=tf.shape(gbf2), mean=0.0, stddev = (sigma * sensitivity)**2, dtype=tf.float32)
+  gw_W1 += tf.random_normal(shape=tf.shape(gw_W1), mean=0.0, stddev = (sigma * sensitivity), dtype=tf.float32) / batch_size
+  gb1 += tf.random_normal(shape=tf.shape(gb1), mean=0.0, stddev = (sigma * sensitivity), dtype=tf.float32) / batch_size
+  gw_W2 += tf.random_normal(shape=tf.shape(gw_W2), mean=0.0, stddev = (sigma * sensitivity), dtype=tf.float32) / batch_size
+  gb2 += tf.random_normal(shape=tf.shape(gb2), mean=0.0, stddev = (sigma * sensitivity), dtype=tf.float32) / batch_size
+  gw_Wf1 += tf.random_normal(shape=tf.shape(gw_Wf1), mean=0.0, stddev = (sigma * sensitivity), dtype=tf.float32) / batch_size
+  gbf1 += tf.random_normal(shape=tf.shape(gbf1), mean=0.0, stddev = (sigma * sensitivity), dtype=tf.float32) / batch_size
+  gw_Wf2 += tf.random_normal(shape=tf.shape(gw_Wf2), mean=0.0, stddev = (sigma * sensitivity), dtype=tf.float32) / batch_size
+  gbf2 += tf.random_normal(shape=tf.shape(gbf2), mean=0.0, stddev = (sigma * sensitivity), dtype=tf.float32) / batch_size
 
   train_step = opt.apply_gradients([(gw_W1,W_conv1),(gb1,b_conv1),(gw_W2,W_conv2),(gb2,b_conv2),(gw_Wf1,W_fc1),(gbf1,b_fc1),(gw_Wf2,W_fc2),(gbf2,b_fc2)]);
 
